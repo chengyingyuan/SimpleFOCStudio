@@ -60,7 +60,7 @@ python simpleFOCStudio.py
 Once you have your application running add a device by clicking the  <img src="./src/gui/resources/add_motor.png" height="18"> motor button in the toolbar. You can choose either the <img src="./src/gui/resources/tree.png" height="18"> TreeView or the <img src="./src/gui/resources/form.png" height="18">FormView.
 - To connect to your device first configure the serial port by clicking on <img src="./src/gui/resources/configure.png" height="18">Configure button 
 - Add your com port info and click OK
-- Then add the device command ID that you've added to the commander usually its `M`
+- Then add the device command ID that you've added to the commander usually its `M` (`command.add('M',doMotor,"my motor")`)
 - Then click to the <img src="./src/gui/resources/connect.png" height="18">Connect button and you should be ready to go!
 
 <p align="center">
