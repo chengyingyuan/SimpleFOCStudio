@@ -31,8 +31,6 @@ class ConfigureSerailConnectionDialog(QtWidgets.QDialog):
         self.bitRateLabel.setObjectName('bitRateLabel')
         self.gridLayout.addWidget(self.bitRateLabel, 0, 2, 1, 1)
 
-
-
         self.bitRatelineEdit = QtWidgets.QLineEdit(self)
         self.bitRatelineEdit.setObjectName('bitRatelineEdit')
         self.bitRatelineEdit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("^[0-9]*$")))
@@ -95,7 +93,7 @@ class ConfigureSerailConnectionDialog(QtWidgets.QDialog):
         self.parityLabel.setText('Parity')
         self.byteSizeLabel.setText('Byte size')
         self.stopBitsLabel.setText('Stop bits')
-        self.connectionIDLabel.setText('Conn ID')
+        self.connectionIDLabel.setText('Connection ID')
 
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)

@@ -18,12 +18,18 @@ class ConnectionControlGroupBox(QtWidgets.QGroupBox):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self)
         self.horizontalLayout.setObjectName('generalControlHL')
 
-        self.devCommandIDLabel = QtWidgets.QLabel("Command:")
-        self.horizontalLayout.addWidget(self.devCommandIDLabel)
-        self.devCommandIDLetter = QtWidgets.QLineEdit()
-        self.devCommandIDLetter.setObjectName('devCommandIDLetter')
-        self.devCommandIDLetter.editingFinished.connect(self.changeDevicedevCommandID)
-        self.horizontalLayout.addWidget(self.devCommandIDLetter)
+        self.selectDevice = QtWidgets.QComboBox(self)
+        self.selectDevice.setObjectName('selectDevice')
+        # self.selectDevice.addItems()
+        self.selectDevice.currentIndexChanged.connect(self.changeDevice)
+        self.horizontalLayout.addWidget(self.selectDevice)
+
+        # self.devCommandIDLabel = QtWidgets.QLabel("Command:")
+        # self.horizontalLayout.addWidget(self.devCommandIDLabel)
+        # self.devCommandIDLetter = QtWidgets.QLineEdit()
+        # self.devCommandIDLetter.setObjectName('devCommandIDLetter')
+        # self.devCommandIDLetter.editingFinished.connect(self.changeDevicedevCommandID)
+        # self.horizontalLayout.addWidget(self.devCommandIDLetter)
 
         self.pullConfig = QtWidgets.QPushButton()
         self.pullConfig.setObjectName('pullConfig')
@@ -50,6 +56,10 @@ class ConnectionControlGroupBox(QtWidgets.QGroupBox):
 
         self.device.addConnectionStateListener(self)
         self.connectionStateChanged(self.device.isConnected)
+        self.device.commProvider.commandDataReceived.connect(
+            self.commandResponseReceived)
+        
+        self.displayedDeviceIDs=[]
     
     def changeDevicedevCommandID(self):
         self.device.devCommandID = self.devCommandIDLetter.text()
@@ -77,3 +87,23 @@ class ConnectionControlGroupBox(QtWidgets.QGroupBox):
         if result:
             deviceConfig = dialog.getConfigValues()
             self.device.configureConnection(deviceConfig)
+
+    def updateDevices(self, value):
+        self.selectDevice.blockSignals(True)
+        keys = list(self.device.deviceList.keys())
+        if set(self.displayedDeviceIDs) != set(keys):
+            self.selectDevice.clear()
+            self.displayedDeviceIDs = []
+            for id in self.device.deviceList:
+                self.selectDevice.addItem(id + ":" + self.device.deviceList[id])
+                self.displayedDeviceIDs.append(id)
+        self.selectDevice.blockSignals(False)
+
+    def changeDevice(self):
+        index = self.selectDevice.currentIndex()
+        keys = list(self.device.deviceList.keys())
+        self.device.devCommandID = keys[index]
+        self.device.pullConfiguration()
+
+    def commandResponseReceived(self, cmdRespose):
+        self.updateDevices(self.device.deviceList)

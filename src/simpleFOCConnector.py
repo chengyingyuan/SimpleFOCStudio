@@ -102,6 +102,7 @@ class SimpleFOCDevice:
 
             # command id of the device
             self.devCommandID = ''
+            self.deviceList = {}
 
             # motion control paramters
             self.PIDVelocity = PIDController(self.VELOCITY_PID)
@@ -368,6 +369,7 @@ class SimpleFOCDevice:
             for listener in self.connectionStateListenerList:
                 listener.connectionStateChanged(True)
             if connectionMode == SimpleFOCDevice.PULL_CONFIG_ON_CONNECT:
+                self.sendListDevices()
                 self.pullConfiguration()
                 if self.stateUpdater.stopped():
                     self.stateUpdater = StateUpdateRunner(self)
@@ -546,6 +548,10 @@ class SimpleFOCDevice:
                 self.setCommand('MS', "{:07d}".format(int(val)))
             else:
                 self.getCommand('MS')
+                
+    def sendListDevices(self):
+        if self.isConnected:
+            self.getCommand('?')
 
 
     def updateStates(self):
@@ -593,6 +599,8 @@ class SimpleFOCDevice:
         self.sendLowPassFilter(lpf,'')
 
     def pullConfiguration(self):
+        if not self.devCommandID:
+            return
         time.sleep(5 / 1000)
         self.sendControlType('')
         time.sleep(5 / 1000)
@@ -694,6 +702,11 @@ class SimpleFOCDevice:
         elif 'offset' in comandResponse:
             self.sensorZeroOffset = float(comandResponse.replace('offset:', ''))
 
+    def parseListDevices(self, comandResponse):
+        dev = comandResponse.split(':')
+        if dev[0] not in self.deviceList.keys():
+            self.deviceList[dev[0]] =  dev[1]
+
     def parseMonitorResponse(self, comandResponse):
         if 'all' in comandResponse:
             varStr = comandResponse.replace('all:', '')
@@ -755,6 +768,11 @@ class SimpleFOCDevice:
         elif 'PWM Mod' in comandResponse:
             comandResponse = comandResponse.replace('PWM Mod | ', '')
             self.parsePWMModResponse(comandResponse)
+        elif 'Target' in comandResponse: 
+            self.targetNow = float(comandResponse.replace('Target:', ''))
+        elif ':' in comandResponse: # a bad manier to try to say that the list of devices has been received
+            self.parseListDevices(comandResponse)
+
 
     def parseStateResponses(self, comandResponse):
         if 'Monitor' in comandResponse:
