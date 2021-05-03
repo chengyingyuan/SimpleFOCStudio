@@ -20,7 +20,7 @@ class ConnectionControlGroupBox(QtWidgets.QGroupBox):
 
         self.selectDevice = QtWidgets.QComboBox(self)
         self.selectDevice.setObjectName('selectDevice')
-        # self.selectDevice.addItems()
+        self.selectDevice.addItem("")
         self.selectDevice.currentIndexChanged.connect(self.changeDevice)
         self.horizontalLayout.addWidget(self.selectDevice)
 
@@ -93,6 +93,7 @@ class ConnectionControlGroupBox(QtWidgets.QGroupBox):
         keys = list(self.device.deviceList.keys())
         if set(self.displayedDeviceIDs) != set(keys):
             self.selectDevice.clear()
+            self.selectDevice.addItem("")
             self.displayedDeviceIDs = []
             for id in self.device.deviceList:
                 self.selectDevice.addItem(id + ":" + self.device.deviceList[id])
@@ -102,7 +103,7 @@ class ConnectionControlGroupBox(QtWidgets.QGroupBox):
     def changeDevice(self):
         index = self.selectDevice.currentIndex()
         keys = list(self.device.deviceList.keys())
-        self.device.devCommandID = keys[index]
+        self.device.devCommandID = keys[index-1]
         self.device.pullConfiguration()
 
     def commandResponseReceived(self, cmdRespose):

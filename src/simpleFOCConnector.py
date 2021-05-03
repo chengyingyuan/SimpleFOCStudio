@@ -378,7 +378,7 @@ class SimpleFOCDevice:
                 self.pushConfiguration()
                 if self.stateUpdater.stopped():
                     self.stateUpdater = StateUpdateRunner(self)
-                sself.stateUpdater.start()
+                self.stateUpdater.start()
                 pass
             return True
 
@@ -770,6 +770,8 @@ class SimpleFOCDevice:
             self.parsePWMModResponse(comandResponse)
         elif 'Target' in comandResponse: 
             self.targetNow = float(comandResponse.replace('Target:', ''))
+        elif 'MOT' in comandResponse: 
+            print(comandResponse.replace('MOT:', ''))
         elif ':' in comandResponse: # a bad manier to try to say that the list of devices has been received
             self.parseListDevices(comandResponse)
 
@@ -854,7 +856,7 @@ class StateUpdateRunner(QtCore.QThread):
     def run(self):
         try:
             while not self.stopped():
-                if self.deviceConnector is not None:
+                if self.deviceConnector is not None and self.deviceConnector.devCommandID:
                     if self.deviceConnector.commProvider.serialComm.isOpen():
                         self.deviceConnector.updateStates()
                         time.sleep(1)
