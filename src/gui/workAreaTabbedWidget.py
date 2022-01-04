@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json
-import os
-import pathlib
 
 from PyQt5 import QtWidgets
 
 from src.gui.commandlinetool.commandlinetool import CommandLineConsoleTool
 from src.gui.configtool.deviceConfigurationTool import DeviceConfigurationTool
+from src.gui.configtool.generatedCodeDisplay import GeneratedCodeDisplay
+from src.gui.configtool.minimalCodeDisplay import MinimalCodeDisplay
 from src.gui.configtool.treeViewConfigTool import TreeViewConfigTool
-from src.gui.configtool.generatedCodeDisplay import GeneratedCodeDisplay,GenerateCodeDialog
 from src.simpleFOCConnector import SimpleFOCDevice
-from src.gui.sharedcomnponets.sharedcomponets import GUIToolKit
 
 
 class WorkAreaTabbedWidget(QtWidgets.QTabWidget):
@@ -27,6 +25,7 @@ class WorkAreaTabbedWidget(QtWidgets.QTabWidget):
         self.cmdLineTool = None
         self.configDeviceTool = None
         self.generatedCodeTab = None
+        self.minimalCodeTab = None
         self.activeToolsList = []
 
         self.tabCloseRequested.connect(self.removeTabHandler)
@@ -41,13 +40,13 @@ class WorkAreaTabbedWidget(QtWidgets.QTabWidget):
         if type(self.currentWidget()) == DeviceConfigurationTool or type(
                 self.currentWidget()) == TreeViewConfigTool:
             self.configDeviceTool = None
+            self.activeToolsList.pop(index)
         if type(self.currentWidget()) == GeneratedCodeDisplay:
             self.generatedCodeTab = None
         if self.configDeviceTool == None and self.cmdLineTool == None:
             if self.device.isConnected:
                 self.device.disConnect()
 
-        self.activeToolsList.pop(index)
         self.removeTab(index)
 
     def addDeviceForm(self):
@@ -122,6 +121,13 @@ class WorkAreaTabbedWidget(QtWidgets.QTabWidget):
                         self.generatedCodeTab.getTabIcon(), self.generatedCodeTab.getTabName())
             self.setCurrentIndex(self.currentIndex() + 1)
 
+    def minimalCode(self):
+        self.minimalCodeTab = MinimalCodeDisplay()
+        self.addTab(self.minimalCodeTab,
+                    self.minimalCodeTab.getTabIcon(), self.minimalCodeTab.getTabName())
+        self.setCurrentIndex(self.currentIndex() + 1)
+        # self.activeToolsList.append(self.minimalCodeTab)
+
 
     def saveToFile(self, deviceToSave, file):
         if type(file) is list:
@@ -129,12 +135,12 @@ class WorkAreaTabbedWidget(QtWidgets.QTabWidget):
                 f.write(json.dumps(deviceToSave.toJSON(), indent=4, sort_keys=True))
         else:
             with open(file, 'w', encoding='utf-8') as f:
-                f.write(json.dumps(deviceToSave.toJSON()))
+                f.write(json.dumps(deviceToSave.toJSON(), indent=4, sort_keys=True))
 
     def openConsoleTool(self):
         if self.cmdLineTool is None:
             self.cmdLineTool = CommandLineConsoleTool()
-            self.activeToolsList.append(self.cmdLineTool)
+            # self.activeToolsList.append(self.cmdLineTool)
             self.addTab(self.cmdLineTool,
                         self.cmdLineTool.getTabIcon(), 'Cmd Line')
             self.setCurrentIndex(self.currentIndex() + 1)

@@ -2,17 +2,20 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets
 
-from src.gui.configtool.controlLoopConfig import ControlLoopGroupBox
-from src.gui.configtool.torqueConfig import TorqueGroupBox
-from src.gui.configtool.generalSettingsWidget import GeneralSettingsGroupBox
-from src.gui.configtool.generalControls import GeneralControls
 from src.gui.configtool.connectionControl import ConnectionControlGroupBox
+from src.gui.configtool.controlLoopConfig import ControlLoopGroupBox
+from src.gui.configtool.deviceJoggingControl import DeviceJoggingControl
 from src.gui.configtool.droDisplayWidget import DROGroupBox
-from src.gui.sharedcomnponets.commandLineInterface import CommandLineWidget
-from src.gui.configtool.pidConfiguration import PidGroupBox
+from src.gui.configtool.generalControls import GeneralControls
+from src.gui.configtool.generalSettingsWidget import GeneralSettingsGroupBox
 from src.gui.configtool.graphicWidget import SimpleFOCGraphicWidget
-from src.gui.sharedcomnponets.sharedcomponets import (WorkAreaTabWidget, GUIToolKit)
+from src.gui.configtool.pidConfiguration import PidGroupBox
+from src.gui.configtool.torqueConfig import TorqueGroupBox
+from src.gui.sharedcomnponets.commandLineInterface import CommandLineWidget
+from src.gui.sharedcomnponets.sharedcomponets import (WorkAreaTabWidget,
+                                                      GUIToolKit)
 from src.simpleFOCConnector import SimpleFOCDevice
+
 
 class DeviceConfigurationTool(WorkAreaTabWidget):
 
@@ -55,17 +58,24 @@ class DeviceConfigurationTool(WorkAreaTabWidget):
         self.pidConfigurator = PidGroupBox(self.bottomWidget)
         self.bottomHorizontalLayout.addWidget(self.pidConfigurator)
 
-        self.generalLayout =  QtWidgets.QVBoxLayout()
+        self.generalLayout = QtWidgets.QVBoxLayout()
         self.generalDeviceSettings = GeneralSettingsGroupBox(self.bottomWidget)
+
         self.generalControls = GeneralControls(self.bottomWidget)
         self.generalLayout.addWidget(self.generalControls)
         self.generalLayout.addWidget(self.generalDeviceSettings)
         self.bottomHorizontalLayout.addLayout(self.generalLayout)
 
-
+        self.lasWidget = QtWidgets.QWidget(self)
+        self.lastVerticalLayout = QtWidgets.QVBoxLayout(self.lasWidget)
 
         self.commandLine = CommandLineWidget(self)
-        self.bottomHorizontalLayout.addWidget(self.commandLine)
+        self.lastVerticalLayout.addWidget(self.commandLine)
+
+        self.joggingControl = DeviceJoggingControl(self)
+        self.lastVerticalLayout.addWidget(self.joggingControl)
+
+        self.bottomHorizontalLayout.addWidget(self.lasWidget)
         self.verticalLayout.addWidget(self.bottomWidget)
 
         self.device.commProvider.commandDataReceived.connect(self.commandLine.publishCommandResponseData)

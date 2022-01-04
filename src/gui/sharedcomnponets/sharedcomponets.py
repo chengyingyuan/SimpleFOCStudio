@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
+
 from PyQt5 import QtGui, QtWidgets, QtCore
 from serial.tools import list_ports
-import os
+
 
 class GUIToolKit(object):
     ''' This class is used to provide icons for the rest of the application
@@ -20,6 +22,8 @@ class GUIToolKit(object):
     def getIconByName(icoName):
 
         file_index = {
+            'ard': 'ard.png',
+            'gen_folder': 'gen_folder.png',
             'add': 'add.png',
             'add_motor': 'add_motor.png',
             'tree': 'tree.png',
@@ -59,7 +63,13 @@ class GUIToolKit(object):
             'disconnect': 'disconnect.png',
             'configure': 'configure.png',
             'pidconfig': 'pidconfig.png',
-            'consoletool': 'consoletool.png'
+            'consoletool': 'consoletool.png',
+            'fordward': 'fordward.png',
+            'fastbackward': 'fastbackward.png',
+            'backward': 'backward.png',
+            'stopjogging': 'stopjogging.png',
+            'fastfordward': 'fastfordward.png',
+            'customcommands':'customcommands.png'
         }
         currentDir = os.path.dirname(__file__)
         icon_path = os.path.join(currentDir, '../resources', file_index[icoName])

@@ -3,6 +3,7 @@
 from PyQt5 import QtWidgets
 from src.gui.sharedcomnponets.sharedcomponets import GUIToolKit
 
+
 class SimpleFOCConfigToolBar(QtWidgets.QToolBar):
 
     def __init__(self,main_window, devicesTabedWidget,  parent=None):
@@ -26,8 +27,6 @@ class SimpleFOCConfigToolBar(QtWidgets.QToolBar):
         self.addDeviceAction.setMenu(self.addDeviceMenu)
         self.addWidget(self.addDeviceAction)
 
-
-
         self.openDeviceAction = QtWidgets.QAction(main_window)
         self.openDeviceAction.setIcon(GUIToolKit.getIconByName('open'))
         self.openDeviceAction.setObjectName('openDeviceAction')
@@ -42,12 +41,6 @@ class SimpleFOCConfigToolBar(QtWidgets.QToolBar):
 
         self.addAction(self.saveDeviceAction)
 
-        self.generateCodeAction = QtWidgets.QAction(main_window)
-        self.generateCodeAction.setIcon(GUIToolKit.getIconByName('gen'))
-        self.generateCodeAction.setObjectName('genertecode')
-        self.generateCodeAction.triggered.connect(devicesTabedWidget.generateCode)
-
-        self.addAction(self.generateCodeAction)
         self.addSeparator()
 
         self.openConsoleToolAction = QtWidgets.QAction(main_window)
@@ -60,4 +53,18 @@ class SimpleFOCConfigToolBar(QtWidgets.QToolBar):
 
         self.addSeparator()
 
+        self.generateCodeAction = QtWidgets.QAction(main_window)
+        self.generateCodeAction.setIcon(GUIToolKit.getIconByName('gen'))
+        self.generateCodeAction.setObjectName('genertecode')
+        self.generateCodeAction.triggered.connect(devicesTabedWidget.generateCode)
 
+        self.addAction(self.generateCodeAction)
+
+        self.minimalCodeAction = QtWidgets.QAction(main_window)
+        self.minimalCodeAction.setIcon(GUIToolKit.getIconByName('gen_folder'))
+        self.minimalCodeAction.setObjectName('minimalLibrary')
+        self.minimalCodeAction.triggered.connect(devicesTabedWidget.minimalCode)
+
+        self.addAction(self.minimalCodeAction)
+
+        self.addSeparator()
