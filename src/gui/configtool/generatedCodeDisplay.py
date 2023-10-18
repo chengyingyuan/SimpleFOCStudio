@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import *
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import (QVBoxLayout)
+from PyQt6 import QtWidgets
+from PyQt6.QtCore import *
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import (QVBoxLayout)
 
 from src.gui.sharedcomnponets.sharedcomponets import (WorkAreaTabWidget,
                                                       GUIToolKit)
@@ -78,7 +78,7 @@ class GenerateCodeDialog(QtWidgets.QDialog):
         self.sensorElOffset.setIcon(GUIToolKit.getIconByName('gear'))
         self.sensorElOffset.setChecked(False)
 
-        QBtn = QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
+        QBtn = QtWidgets.QDialogButtonBox.StandardButton.Ok | QtWidgets.QDialogButtonBox.StandardButton.Cancel
 
         self.buttonBox = QtWidgets.QDialogButtonBox(QBtn)
         self.buttonBox.accepted.connect(self.accept)
@@ -113,7 +113,7 @@ class GeneratedCodeDisplay(WorkAreaTabWidget):
         
         self.device = SimpleFOCDevice.getInstance()
         dlg = GenerateCodeDialog()  # If you pass self, the dialog will be centered over the main window as before.
-        if dlg.exec_():
+        if dlg.exec():
             toGenerate=[
                 dlg.checkBoxMotionControl.isChecked(),
                 dlg.checkBoxPidVel.isChecked(),
@@ -189,13 +189,13 @@ class MyHighlighter( QSyntaxHighlighter ):
       keyword.setForeground( brush )
       keywords = list( [ "motor",'FOCModulationType','MotionControlType','TorqueControlType'] )
       for word in keywords:
-        pattern = QRegExp("\\b" + word + "\\b")
+        pattern = QRegularExpression("\\b" + word + "\\b")
         rule = HighlightingRule( pattern, keyword )
         self.highlightingRules.append( rule )
 
       # comment
       brush = QBrush( Qt.gray, Qt.SolidPattern )
-      pattern = QRegExp( "\/\/.*[^\n]" )
+      pattern = QRegularExpression( "\/\/.*[^\n]" )
       comment.setForeground( brush )
       comment.setFontItalic( True )
       rule = HighlightingRule( pattern, comment )
@@ -204,7 +204,7 @@ class MyHighlighter( QSyntaxHighlighter ):
 
     def highlightBlock( self, text ):
       for rule in self.highlightingRules:
-        expression = QRegExp( rule.pattern )
+        expression = QRegularExpression( rule.pattern )
         index = expression.indexIn( text )
         while index >= 0:
           length = expression.matchedLength()

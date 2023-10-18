@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtCore import *
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QSplitter
+from PyQt6 import QtWidgets, QtCore
+from PyQt6.QtCore import *
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import QFileDialog, QTreeView, QVBoxLayout, QHBoxLayout, QSplitter, QLabel, QPushButton, QLineEdit, QComboBox, QMessageBox
+from PyQt6.QtWidgets import QWidget
 
 from src.gui.sharedcomnponets.sharedcomponets import (WorkAreaTabWidget,
                                                       GUIToolKit)
@@ -209,7 +210,7 @@ class MinimalCodeDialog(QtWidgets.QDialog):
         for family in supportedMCUS:
           self.dropDownMCU.addItem(supportedMCUS[family], family)
 
-        QBtn = QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
+        QBtn = QtWidgets.QDialogButtonBox.StandardButton.Ok | QtWidgets.QDialogButtonBox.StandardButton.Cancel
 
         self.buttonBox = QtWidgets.QDialogButtonBox(QBtn)
         self.buttonBox.accepted.connect(self.accept)
@@ -250,7 +251,7 @@ class MinimalCodeDisplay(WorkAreaTabWidget):
         
         self.device = SimpleFOCDevice.getInstance()
         dlg = MinimalCodeDialog()  # If you pass self, the dialog will be centered over the main window as before.
-        if not dlg.exec_():
+        if not dlg.exec():
           return
           
         # get the version of the library from te github
@@ -657,10 +658,10 @@ class Highlighter(QSyntaxHighlighter):
             elif 'LITERAL1' in line[1]:
               literals1.append(line[0])
 
-        self.highlightingRules = [(QRegExp(pattern), keyword1Format)
+        self.highlightingRules = [(QRegularExpression(pattern), keyword1Format)
                 for pattern in keywords1]
                 
-        [self.highlightingRules.append((QRegExp(pattern), literals1Format))
+        [self.highlightingRules.append((QRegularExpression(pattern), literals1Format))
                 for pattern in literals1]
 
 
@@ -676,19 +677,19 @@ class Highlighter(QSyntaxHighlighter):
                 "\\bunion\\b", "\\bunsigned\\b", "\\bvirtual\\b", "\\bvoid\\b",
                 "\\bvolatile\\b","\\bbool\\b"]
 
-        [self.highlightingRules.append((QRegExp(pattern), keywordFormat))
+        [self.highlightingRules.append((QRegularExpression(pattern), keywordFormat))
                 for pattern in keywordPatterns]
 
 
         classFormat = QTextCharFormat()
         classFormat.setFontWeight(QFont.Bold)
         classFormat.setForeground(Qt.darkMagenta)
-        self.highlightingRules.append((QRegExp("\\bQ[A-Za-z]+\\b"),
+        self.highlightingRules.append((QRegularExpression("\\bQ[A-Za-z]+\\b"),
                 classFormat))
 
         singleLineCommentFormat = QTextCharFormat()
         singleLineCommentFormat.setForeground(Qt.darkGray)
-        self.highlightingRules.append((QRegExp("//[^\n]*"),
+        self.highlightingRules.append((QRegularExpression("//[^\n]*"),
                 singleLineCommentFormat))
 
         self.multiLineCommentFormat = QTextCharFormat()
@@ -697,28 +698,28 @@ class Highlighter(QSyntaxHighlighter):
         quotationFormat = QTextCharFormat()
         quotationFormat.setForeground(QColor(255, 140, 0,255))
         quotationFormat.setFontWeight(QFont.Bold)
-        self.highlightingRules.append((QRegExp("\".*\""), quotationFormat))
+        self.highlightingRules.append((QRegularExpression("\".*\""), quotationFormat))
 
         functionFormat = QTextCharFormat()
         functionFormat.setFontItalic(True)
         functionFormat.setForeground(Qt.black)
-        self.highlightingRules.append((QRegExp("\\b[A-Za-z0-9_]+(?=\\()"),
+        self.highlightingRules.append((QRegularExpression("\\b[A-Za-z0-9_]+(?=\\()"),
                 functionFormat))
 
-        self.commentStartExpression = QRegExp("/\\*")
-        self.commentEndExpression = QRegExp("\\*/")
+        self.commentStartExpression = QRegularExpression("/\\*")
+        self.commentEndExpression = QRegularExpression("\\*/")
 
 
         keywordFormat = QTextCharFormat()
         keywordFormat.setForeground(Qt.darkGreen)
         keywordPatterns = ["\\bif\\b", "\\belse\\b", "\\breturn\\b", "\\bswitch\\b", "\\bcase\\b","\\bwhile\\b"]
 
-        [self.highlightingRules.append((QRegExp(pattern), keywordFormat))
+        [self.highlightingRules.append((QRegularExpression(pattern), keywordFormat))
                 for pattern in keywordPatterns]
 
     def highlightBlock(self, text):
         for pattern, format in self.highlightingRules:
-            expression = QRegExp(pattern)
+            expression = QRegularExpression(pattern)
             index = expression.indexIn(text)
             while index >= 0:
                 length = expression.matchedLength()

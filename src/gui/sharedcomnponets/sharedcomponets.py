@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from PyQt5 import QtGui, QtWidgets, QtCore
+from PyQt6 import QtGui, QtWidgets, QtCore
 from serial.tools import list_ports
 
 
@@ -74,8 +74,8 @@ class GUIToolKit(object):
         currentDir = os.path.dirname(__file__)
         icon_path = os.path.join(currentDir, '../resources', file_index[icoName])
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(icon_path), QtGui.QIcon.Normal,
-                      QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(icon_path), QtGui.QIcon.Mode.Normal,
+                      QtGui.QIcon.State.Off)
         return icon
 
 

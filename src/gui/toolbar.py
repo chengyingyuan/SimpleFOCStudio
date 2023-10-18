@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets, QtGui
 from src.gui.sharedcomnponets.sharedcomponets import GUIToolKit
 
 
@@ -12,13 +12,13 @@ class SimpleFOCConfigToolBar(QtWidgets.QToolBar):
         self.addDeviceAction = QtWidgets.QToolButton(main_window)
         self.addDeviceAction.setIcon(GUIToolKit.getIconByName('add_motor'))
         self.addDeviceAction.setObjectName('addDeviceAction')
-        self.addDeviceAction.setPopupMode(QtWidgets.QToolButton.InstantPopup)
+        self.addDeviceAction.setPopupMode(QtWidgets.QToolButton.ToolButtonPopupMode.InstantPopup)
 
         self.addDeviceMenu = QtWidgets.QMenu(self.addDeviceAction)
-        self.addDeviceTreeView  = QtWidgets.QAction("Tree View",self.addDeviceMenu)
+        self.addDeviceTreeView  = QtGui.QAction("Tree View",self.addDeviceMenu)
         self.addDeviceTreeView.setIcon(GUIToolKit.getIconByName('tree'))
         self.addDeviceTreeView.triggered.connect(devicesTabedWidget.addDeviceTree)
-        self.addDeviceFormView  = QtWidgets.QAction("Form View",self.addDeviceMenu)
+        self.addDeviceFormView  = QtGui.QAction("Form View",self.addDeviceMenu)
         self.addDeviceFormView.setIcon(GUIToolKit.getIconByName('form'))
         self.addDeviceFormView.triggered.connect(devicesTabedWidget.addDeviceForm)
         
@@ -27,14 +27,14 @@ class SimpleFOCConfigToolBar(QtWidgets.QToolBar):
         self.addDeviceAction.setMenu(self.addDeviceMenu)
         self.addWidget(self.addDeviceAction)
 
-        self.openDeviceAction = QtWidgets.QAction(main_window)
+        self.openDeviceAction = QtGui.QAction(main_window)
         self.openDeviceAction.setIcon(GUIToolKit.getIconByName('open'))
         self.openDeviceAction.setObjectName('openDeviceAction')
         self.openDeviceAction.triggered.connect(devicesTabedWidget.openDevice)
 
         self.addAction(self.openDeviceAction)
 
-        self.saveDeviceAction = QtWidgets.QAction(main_window)
+        self.saveDeviceAction = QtGui.QAction(main_window)
         self.saveDeviceAction.setIcon(GUIToolKit.getIconByName('save'))
         self.saveDeviceAction.setObjectName('saveDeviceAction')
         self.saveDeviceAction.triggered.connect(devicesTabedWidget.saveDevice)
@@ -43,7 +43,7 @@ class SimpleFOCConfigToolBar(QtWidgets.QToolBar):
 
         self.addSeparator()
 
-        self.openConsoleToolAction = QtWidgets.QAction(main_window)
+        self.openConsoleToolAction = QtGui.QAction(main_window)
         self.openConsoleToolAction.setIcon(GUIToolKit.getIconByName('consoletool'))
         self.openConsoleToolAction.setToolTip('Open Serial Cosole tool')
         self.openConsoleToolAction.setObjectName('openconsoletool')
@@ -53,14 +53,14 @@ class SimpleFOCConfigToolBar(QtWidgets.QToolBar):
 
         self.addSeparator()
 
-        self.generateCodeAction = QtWidgets.QAction(main_window)
+        self.generateCodeAction = QtGui.QAction(main_window)
         self.generateCodeAction.setIcon(GUIToolKit.getIconByName('gen'))
         self.generateCodeAction.setObjectName('genertecode')
         self.generateCodeAction.triggered.connect(devicesTabedWidget.generateCode)
 
         self.addAction(self.generateCodeAction)
 
-        self.minimalCodeAction = QtWidgets.QAction(main_window)
+        self.minimalCodeAction = QtGui.QAction(main_window)
         self.minimalCodeAction.setIcon(GUIToolKit.getIconByName('gen_folder'))
         self.minimalCodeAction.setObjectName('minimalLibrary')
         self.minimalCodeAction.triggered.connect(devicesTabedWidget.minimalCode)

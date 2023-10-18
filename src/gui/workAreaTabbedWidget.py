@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 import json
 
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets
+from PyQt6.QtWidgets import QPushButton
 
 from src.gui.commandlinetool.commandlinetool import CommandLineConsoleTool
 from src.gui.configtool.deviceConfigurationTool import DeviceConfigurationTool
@@ -68,9 +69,9 @@ class WorkAreaTabbedWidget(QtWidgets.QTabWidget):
     def openDevice(self):
         if self.configDeviceTool is None:
             dlg = QtWidgets.QFileDialog()
-            dlg.setFileMode(QtWidgets.QFileDialog.AnyFile)
+            dlg.setFileMode(QtWidgets.QFileDialog.FileMode.AnyFile)
             filenames = None
-            if dlg.exec_():
+            if dlg.exec():
                 filenames = dlg.selectedFiles()
                 try:
                     with open(filenames[0]) as json_file:
@@ -89,18 +90,18 @@ class WorkAreaTabbedWidget(QtWidgets.QTabWidget):
 
                 except Exception as exception:
                     msgBox = QtWidgets.QMessageBox()
-                    msgBox.setIcon(QtWidgets.QMessageBox.Warning)
+                    msgBox.setIcon(QtWidgets.QMessageBox.Icon.Warning)
                     msgBox.setText('Error while opening selected file')
                     msgBox.setWindowTitle('SimpleFOC configDeviceTool')
-                    msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
                     msgBox.exec()
 
     def saveDevice(self):
         if len(self.activeToolsList) > 0:
             currentconfigDeviceTool = self.activeToolsList[self.currentIndex()]
             if currentconfigDeviceTool.device.openedFile is None:
-                options = QtWidgets.QFileDialog.Options()
-                options |= QtWidgets.QFileDialog.DontUseNativeDialog
+                options = QtWidgets.QFileDialog.Option.DontUseNativeDialog
+                #options |= QtWidgets.QFileDialog.DontUseNativeDialog
                 fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,
                                                                     'Save device configuration',
                                                                     '',

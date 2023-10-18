@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtGui, QtWidgets
+from PyQt6 import QtGui, QtWidgets
 
 from src.gui.sharedcomnponets.sharedcomponets import GUIToolKit
 from src.simpleFOCConnector import SimpleFOCDevice
@@ -90,23 +90,23 @@ class DROGroupBox(QtWidgets.QGroupBox):
         self.signal2LCDNumber.display(0.0)
         self.signal3LCDNumber.display(0.0)
 
-    def putStyleToLCDNumber(self, lcdNumber):
+    def putStyleToLCDNumber(self, lcdNumber:QtWidgets.QLCDNumber):
         lcdNumber.setStyleSheet('''QLCDNumber {background-color: white;}''')
         palette = self.setColor(lcdNumber.palette(), GUIToolKit.RED_COLOR)
         lcdNumber.setPalette(palette)
 
-    def setColor(self, palette, colorTouple):
+    def setColor(self, palette:QtGui.QPalette, colorTouple):
         R = colorTouple[0]
         G = colorTouple[1]
         B = colorTouple[2]
         # foreground color
-        palette.setColor(palette.WindowText, QtGui.QColor(R, G, B))
+        palette.setColor(palette.ColorRole.WindowText, QtGui.QColor(R, G, B))
         # background color
-        palette.setColor(palette.Background, QtGui.QColor(R, G, B))
+        palette.setColor(palette.ColorRole.Window, QtGui.QColor(R, G, B))
         # 'light' border
-        palette.setColor(palette.Light, QtGui.QColor(R, G, B))
+        palette.setColor(palette.ColorRole.Light, QtGui.QColor(R, G, B))
         # 'dark' border
-        palette.setColor(palette.Dark, QtGui.QColor(R, G, B))
+        palette.setColor(palette.ColorRole.Dark, QtGui.QColor(R, G, B))
         return palette
 
     def commandResponseReceived(self, cmdRespose):        
